@@ -18,6 +18,11 @@ def addTask(taskTitle: str, isCompleted=False):
     except Exception as e:
         print(f"{Fore.LIGHTRED_EX}An error occurred while adding the task:\n{e}")
 
+    # check for duplication of taskTitle
+    if any(task["title"] == taskTitle for task in tasks):
+        print(f"{Fore.LIGHTYELLOW_EX}Duplicate task(not added): the task you are trying to add already exists")
+        return exit()
+
     # add the new task to the previous list
     newTask = {"title": taskTitle, "completed": isCompleted}
     tasks.append(newTask)
