@@ -18,13 +18,19 @@ def addTask(taskTitle: str, isCompleted=False):
     except Exception as e:
         print(f"{Fore.LIGHTRED_EX}An error occurred while adding the task:\n{e}")
 
-    # check for duplication of taskTitle
+    # check for duplication of the new task based of taskTitle
     if any(task["title"] == taskTitle for task in tasks):
         print(f"{Fore.LIGHTYELLOW_EX}Duplicate task(not added): the task you are trying to add already exists")
         return exit()
 
+    # add ID to each new task being created
+    def generateTaskId() -> int:
+        newTaskID = tasks[-1]["id"] + 1
+        print(f" {Fore.LIGHTMAGENTA_EX}New ID assigned to task: {newTaskID}")
+        return newTaskID
+
     # add the new task to the previous list
-    newTask = {"title": taskTitle, "completed": isCompleted}
+    newTask = {"id": generateTaskId(),"title": taskTitle, "completed": isCompleted}
     tasks.append(newTask)
 
     # write the updated task list to the json file
