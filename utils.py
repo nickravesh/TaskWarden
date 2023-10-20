@@ -25,9 +25,13 @@ def addTask(taskTitle: str, isCompleted=False):
 
     # add ID to each new task being created
     def generateTaskId() -> int:
-        newTaskID = tasks[-1]["id"] + 1
-        print(f" {Fore.LIGHTMAGENTA_EX}New ID assigned to task: {newTaskID}")
-        return newTaskID
+        try:
+            newTaskID = tasks[-1]["id"] + 1
+            print(f" {Fore.LIGHTMAGENTA_EX}New ID assigned to task: {newTaskID}")
+            return newTaskID
+        except:
+            print(f" {Fore.LIGHTMAGENTA_EX}New ID assigned to task: {1}")
+            return 1
 
     # add the new task to the previous list
     newTask = {"id": generateTaskId(),"title": taskTitle, "completed": isCompleted}
@@ -50,7 +54,7 @@ def updateTaskCompletion(taskID: int, isCompleted: bool):
         return exit()
     
     if isCompleted:
-        #tasks = []
+        tasks = []
 
         try: # read/load the tasks from json into a variable
             with open("tasks.json", "r") as file:
@@ -89,3 +93,43 @@ def updateTaskCompletion(taskID: int, isCompleted: bool):
 
 # Usage:
 #updateTaskCompletion(1, isCompleted=True)
+
+
+def deleteTask(taskID: int):
+    tasks = []
+
+    # check for existence of tasks.json
+    if os.path.isfile("tasks.json") == False:
+        print(f"{Fore.LIGHTRED_EX}-No task to delete, you must first add a task-")
+        return exit()
+    
+
+    try: # read/load the tasks from json into a variable
+        with open("tasks.json", "r") as file:
+            tasks = json.load(file)
+    except json.JSONDecodeError:
+        print(f"{Fore.LIGHTRED_EX}-No task to delete, you must first add a task-")
+        return exit()
+    except Exception as e:
+        print(f"{Fore.LIGHTRED_EX}An error occurred while loading tasks from JSON:{Fore.RESET}\n{e}")
+
+    # delete the task based on the given ID
+    for task in tasks:
+        if task["id"] == taskID:
+            tasks.remove(task)
+            # sort the IDs and fill the gap of the deleted task, because now the IDs sequence is not right
+            for enum, task in enumerate(tasks):
+                task["id"] = enum + 1
+
+            # write the updated task list to the json file
+            with open("tasks.json", "w") as file:
+                json.dump(tasks, file, indent=4)
+
+            print(f"{Fore.LIGHTGREEN_EX}-Task deleted successfully-")
+            return
+    else:
+        print(f"{Fore.LIGHTRED_EX}-No task exists with the given ID-")
+        return
+
+
+#deleteTask(3)
