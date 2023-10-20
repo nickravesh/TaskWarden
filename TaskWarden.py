@@ -2,16 +2,23 @@ import utils
 import argparse
 
 parser = argparse.ArgumentParser(description="TaskWarden, A ToDo-List for those who love the command line.")
-parser.add_argument("taskTitle", type=str, nargs="?", help="the title of task")
-parser.add_argument("-d", "--done", action="store_true", help="mark task as completed/uncompleted")
+subParsers = parser.add_subparsers(title="Subcommands", help="Standard operations")
+# define sub-parser for adding task
+addTask_Subparser = subParsers.add_parser("add", help="add a new task to TaskWarden")
+addTask_Subparser.add_argument("add", type=str, nargs="?", help="add a new task to TaskWarden")
+# define sub-parser for marking tasks as completed/uncompleted
+doneTask_Subparser = subParsers.add_parser("done", help="mark task as completed/uncompleted")
+doneTask_Subparser.add_argument("done", type=int, nargs="?", help="mark task as completed/uncompleted")
+
 args = parser.parse_args()
 
-if args.done and args.done:
-    # If -d is provided along with a taskTitle, mark the task as completed
-    utils.updateTaskCompletion(args.taskTitle, True)
-elif args.taskTitle:
-    # If only a taskTitle is provided, add the task
-    utils.addTask(args.taskTitle)
-else:
-    # Handle the case where no arguments are provided
-    parser.print_help()
+if hasattr(args, "add"):
+    if args.add != None:
+        utils.addTask(args.add)
+elif hasattr(args, "done"):
+    if args.done != None:
+        utils.updateTaskCompletion(args.done, True)
+    else:
+        #open questionary and ask the user which task they completed
+        pass
+
