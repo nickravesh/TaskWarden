@@ -131,5 +131,48 @@ def deleteTask(taskID: int):
         print(f"{Fore.LIGHTRED_EX}-No task exists with the given ID-")
         return
 
-
 #deleteTask(3)
+
+def listTask():
+    def log(header, *messages):
+        max_length = max(len(message) for message in messages)
+        header_length = len(header)
+        box_width = max(max_length + 2, header_length + 2)
+        border = '+' + '-' * box_width + '+'
+
+        print(border)
+        print(f"| {header:^{box_width-2}} |")
+        print(border)
+        for message in messages:
+            log_message = f"| {message:{box_width-2}} |"
+            print(log_message)
+        print(border)
+
+    tasks = []
+
+    # check for existence of tasks.json
+    if os.path.isfile("tasks.json") == False:
+        print(f"{Fore.LIGHTRED_EX}-No task to display, you must first add a task-")
+        return exit()
+    
+
+    try: # read/load the tasks from json into a variable
+        with open("tasks.json", "r") as file:
+            tasks = json.load(file)
+    except json.JSONDecodeError:
+        print(f"{Fore.LIGHTRED_EX}-No task to display, you must first add a task-")
+        return exit()
+    except Exception as e:
+        print(f"{Fore.LIGHTRED_EX}An error occurred while loading tasks from JSON:{Fore.RESET}\n{e}")
+
+    try:
+        allTasksTitle = []
+        for task in tasks:
+            allTasksTitle.append(f"{task['id']}  {task['title']}")
+        log("TaskWarden", *allTasksTitle)
+    except Exception as e:
+        print(e)
+        print(f"{Fore.LIGHTRED_EX}-No task to display, you must first add a task-")
+# TODO: add checkbox or line on the text to indicate if the task has marked as done
+# usage:
+#listTask()
