@@ -134,7 +134,10 @@ def deleteTask(taskID: int):
 #deleteTask(3)
 
 def listTask():
-    def log(header, *messages):
+    def log(header: str,  rawJson: list, *messages: list):
+        strikethrough = "\x1b[9m"
+        reset_format = "\x1b[0m"
+        
         max_length = max(len(message) for message in messages)
         header_length = len(header)
         box_width = max(max_length + 2, header_length + 2)
@@ -143,9 +146,13 @@ def listTask():
         print(border)
         print(f"| {header:^{box_width-2}} |")
         print(border)
-        for message in messages:
-            log_message = f"| {message:{box_width-2}} |"
-            print(log_message)
+        for message, item in zip(messages, rawJson):
+            if item["completed"] == True:
+                log_message = f"| {strikethrough}{message:{box_width-2}}{reset_format} |"
+                print(log_message)
+            else:
+                log_message = f"| {message:{box_width-2}} |"
+                print(log_message)
         print(border)
 
     tasks = []
@@ -169,10 +176,9 @@ def listTask():
         allTasksTitle = []
         for task in tasks:
             allTasksTitle.append(f"{task['id']}  {task['title']}")
-        log("TaskWarden", *allTasksTitle)
+        log("TaskWarden", tasks, *allTasksTitle)
     except Exception as e:
         print(e)
         print(f"{Fore.LIGHTRED_EX}-No task to display, you must first add a task-")
-# TODO: add checkbox or line on the text to indicate if the task has marked as done
 # usage:
 #listTask()
