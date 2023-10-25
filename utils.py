@@ -94,8 +94,38 @@ def updateTaskCompletion(taskID: int, isCompleted: bool):
 # Usage:
 #updateTaskCompletion(1, isCompleted=True)
 
+def manualSort():
+    tasks = []
 
-def deleteTask(taskID: int):
+    # check for existence of tasks.json
+    if os.path.isfile("tasks.json") == False:
+        print(f"{Fore.LIGHTRED_EX}-No task to sort-")
+        return exit()
+    
+    try: # read/load the tasks from json into a variable
+        with open("tasks.json", "r") as file:
+            tasks = json.load(file)
+    except json.JSONDecodeError:
+        print(f"{Fore.LIGHTRED_EX}-No task to sort-")
+        return exit()
+    except Exception as e:
+        print(f"{Fore.LIGHTRED_EX}An error occurred while loading tasks from JSON:{Fore.RESET}\n{e}")
+
+    # sort the task
+    for task in tasks:
+        # sort the IDs and fill the gap of the deleted task
+        for enum, task in enumerate(tasks):
+            task["id"] = enum + 1
+
+        # write the updated task list to the json file
+        with open("tasks.json", "w") as file:
+            json.dump(tasks, file, indent=4)
+
+        print(f"{Fore.LIGHTMAGENTA_EX}-Tasks sorted successfully-")
+        return
+
+
+def deleteTask(taskID: int, multiDelete: bool = False):
     tasks = []
 
     # check for existence of tasks.json
@@ -117,9 +147,10 @@ def deleteTask(taskID: int):
     for task in tasks:
         if task["id"] == taskID:
             tasks.remove(task)
-            # sort the IDs and fill the gap of the deleted task, because now the IDs sequence is not right
-            for enum, task in enumerate(tasks):
-                task["id"] = enum + 1
+            if multiDelete == False:
+                # sort the IDs and fill the gap of the deleted task, because now the IDs sequence is not right
+                for enum, task in enumerate(tasks):
+                    task["id"] = enum + 1
 
             # write the updated task list to the json file
             with open("tasks.json", "w") as file:
