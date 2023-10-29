@@ -4,15 +4,20 @@ from colorama import init, Fore
 
 init(autoreset=True)
 
+# Get the directory of the script
+script_dir = os.path.dirname(os.path.abspath(__file__))
+# Define an absolute path to the tasks.json file in the script directory
+tasksJson_file = os.path.join(script_dir, "tasks.json")
+
 def addTask(taskTitle: str, isCompleted=False):
     tasks = []
 
     # check for existence of tasks.json
-    if os.path.isfile("tasks.json") == False:
-        with open("tasks.json", "w") as file: file.close()
+    if os.path.isfile(tasksJson_file) == False:
+        with open(tasksJson_file, "w") as file: file.close()
 
     try: # read/load the tasks from json into a variable
-        with open("tasks.json", "r") as file:
+        with open(tasksJson_file, "r") as file:
             tasks = json.load(file)
     except json.JSONDecodeError: pass
     except Exception as e:
@@ -38,7 +43,7 @@ def addTask(taskTitle: str, isCompleted=False):
     tasks.append(newTask)
 
     # write the updated task list to the json file
-    with open("tasks.json", "w") as file:
+    with open(tasksJson_file, "w") as file:
         json.dump(tasks, file, indent=4)
 
     print(f"{Fore.LIGHTGREEN_EX}-Task Added-")
@@ -49,7 +54,7 @@ def addTask(taskTitle: str, isCompleted=False):
 
 def updateTaskCompletion(taskID: int, isCompleted: bool):
     # check for existence of tasks.json
-    if os.path.isfile("tasks.json") == False:
+    if os.path.isfile(tasksJson_file) == False:
         print(f"{Fore.LIGHTRED_EX}-No task to mark, you must first add a task-")
         return exit()
     
@@ -57,7 +62,7 @@ def updateTaskCompletion(taskID: int, isCompleted: bool):
         tasks = []
 
         try: # read/load the tasks from json into a variable
-            with open("tasks.json", "r") as file:
+            with open(tasksJson_file, "r") as file:
                 tasks = json.load(file)
         except json.JSONDecodeError:
             print(f"{Fore.LIGHTRED_EX}-No task to mark, you must first add a task-")
@@ -71,7 +76,7 @@ def updateTaskCompletion(taskID: int, isCompleted: bool):
                 task["completed"] = True
 
                 # write the updated task list to the json file
-                with open("tasks.json", "w") as file:
+                with open(tasksJson_file, "w") as file:
                     json.dump(tasks, file, indent=4)
 
                 print(f"{Fore.LIGHTGREEN_EX}-Task marked as completed-")
@@ -83,7 +88,7 @@ def updateTaskCompletion(taskID: int, isCompleted: bool):
                 task["completed"] = False
 
                 # write the updated task list to the json file
-                with open("tasks.json", "w") as file:
+                with open(tasksJson_file, "w") as file:
                     json.dump(tasks, file, indent=4)
 
                 print(f"{Fore.LIGHTYELLOW_EX}-Task marked as {Fore.LIGHTRED_EX}un{Fore.RESET}{Fore.LIGHTYELLOW_EX}completed-")
@@ -98,12 +103,12 @@ def manualSort():
     tasks = []
 
     # check for existence of tasks.json
-    if os.path.isfile("tasks.json") == False:
+    if os.path.isfile(tasksJson_file) == False:
         print(f"{Fore.LIGHTRED_EX}-No task to sort-")
         return exit()
     
     try: # read/load the tasks from json into a variable
-        with open("tasks.json", "r") as file:
+        with open(tasksJson_file, "r") as file:
             tasks = json.load(file)
     except json.JSONDecodeError:
         print(f"{Fore.LIGHTRED_EX}-No task to sort-")
@@ -118,7 +123,7 @@ def manualSort():
             task["id"] = enum + 1
 
         # write the updated task list to the json file
-        with open("tasks.json", "w") as file:
+        with open(tasksJson_file, "w") as file:
             json.dump(tasks, file, indent=4)
 
         print(f"{Fore.LIGHTMAGENTA_EX}-Tasks sorted successfully-")
@@ -129,13 +134,13 @@ def deleteTask(taskID: int, multiDelete: bool = False):
     tasks = []
 
     # check for existence of tasks.json
-    if os.path.isfile("tasks.json") == False:
+    if os.path.isfile(tasksJson_file) == False:
         print(f"{Fore.LIGHTRED_EX}-No task to delete, you must first add a task-")
         return exit()
     
 
     try: # read/load the tasks from json into a variable
-        with open("tasks.json", "r") as file:
+        with open(tasksJson_file, "r") as file:
             tasks = json.load(file)
     except json.JSONDecodeError:
         print(f"{Fore.LIGHTRED_EX}-No task to delete, you must first add a task-")
@@ -153,7 +158,7 @@ def deleteTask(taskID: int, multiDelete: bool = False):
                     task["id"] = enum + 1
 
             # write the updated task list to the json file
-            with open("tasks.json", "w") as file:
+            with open(tasksJson_file, "w") as file:
                 json.dump(tasks, file, indent=4)
 
             print(f"{Fore.LIGHTGREEN_EX}-Task deleted successfully-")
@@ -189,13 +194,13 @@ def listTask():
     tasks = []
 
     # check for existence of tasks.json
-    if os.path.isfile("tasks.json") == False:
+    if os.path.isfile(tasksJson_file) == False:
         print(f"{Fore.LIGHTRED_EX}-No task to display, you must first add a task-")
         return exit()
     
 
     try: # read/load the tasks from json into a variable
-        with open("tasks.json", "r") as file:
+        with open(tasksJson_file, "r") as file:
             tasks = json.load(file)
     except json.JSONDecodeError:
         print(f"{Fore.LIGHTRED_EX}-No task to display, you must first add a task-")
