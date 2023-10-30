@@ -31,7 +31,7 @@ Not much, just the `coloroma` to print colored logs for you:
 ```bash
 pip3 install colorama
 ```
-**Note:** If you want to use the installer, it will take care of the requirements itself, so you can forget about this step...
+**Note:** It's recommended to use the installer (install.sh file), as it will take care of the requirements itself, so you can forget about this step...
 
 ## One-Liner install for Debian-based distros
 
