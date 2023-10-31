@@ -116,18 +116,17 @@ def manualSort():
     except Exception as e:
         print(f"{Fore.LIGHTRED_EX}An error occurred while loading tasks from JSON:{Fore.RESET}\n{e}")
 
-    # sort the task
-    for task in tasks:
-        # sort the IDs and fill the gap of the deleted task
-        for enum, task in enumerate(tasks):
-            task["id"] = enum + 1
 
-        # write the updated task list to the json file
-        with open(tasksJson_file, "w") as file:
-            json.dump(tasks, file, indent=4)
+    # sort the tasks: sort the IDs and fill the gap of the deleted task
+    for enum, task in enumerate(tasks):
+        task["id"] = enum + 1
 
-        print(f"{Fore.LIGHTMAGENTA_EX}-Tasks sorted successfully-")
-        return
+    # write the updated task list to the json file
+    with open(tasksJson_file, "w") as file:
+        json.dump(tasks, file, indent=4)
+
+    print(f"{Fore.LIGHTMAGENTA_EX}-Tasks sorted successfully-")
+    return
 
 
 def deleteTask(taskID: int, multiDelete: bool = False):
@@ -218,3 +217,40 @@ def listTask():
         print(f"{Fore.LIGHTRED_EX}-No task to display, you must first add a task-")
 # usage:
 #listTask()
+
+def sortCompletedTasks():
+    tasks = []
+
+    # check for existence of tasks.json
+    if os.path.isfile(tasksJson_file) == False:
+        print(f"{Fore.LIGHTRED_EX}-No task to sort-")
+        return exit()
+    
+    try: # read/load the tasks from json into a variable
+        with open(tasksJson_file, "r") as file:
+            tasks = json.load(file)
+    except json.JSONDecodeError:
+        print(f"{Fore.LIGHTRED_EX}-No task to sort-")
+        return exit()
+    except Exception as e:
+        print(f"{Fore.LIGHTRED_EX}An error occurred while loading tasks from JSON:{Fore.RESET}\n{e}")
+
+    # sort the completed tasks and move them to the end of the list
+    for task in tasks:
+        # sort the IDs and fill the gap of the deleted task
+        if task["completed"] == True:
+            print(tasks)
+            tasks.append(task)
+            print(tasks)
+            tasks.remove(task)
+            print(tasks)
+
+    # write the updated task list to the json file
+    with open(tasksJson_file, "w") as file:
+        json.dump(tasks, file, indent=4)
+
+    manualSort()
+    print(f"{Fore.LIGHTMAGENTA_EX}-Tasks sorted successfully-")
+    return
+
+#sortCompletedTasks()
