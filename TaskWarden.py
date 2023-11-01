@@ -15,6 +15,9 @@ removeTask_Subparser.add_argument("rm", type=int, nargs="*", help="remove tasks 
 # define sub-parser for listing tasks
 listTask_Subparser = subParsers.add_parser("ls", help="display the list of existing tasks")
 listTask_Subparser.add_argument("ls", action="store_true", help="display the list of existing tasks")
+# define sub-parser for sorting completed tasks
+sortTask_Subparser = subParsers.add_parser("sort", help="sort the completed tasks to the end of the list")
+sortTask_Subparser.add_argument("sort", action="store_true", help="sort the completed tasks to the end of the list")
 
 args = parser.parse_args()
 
@@ -40,6 +43,9 @@ elif hasattr(args, "rm"):
 elif hasattr(args, "ls"):
     if args.ls:
         utils.listTask()
+elif hasattr(args, "sort"):
+    if args.sort:
+        utils.sortCompletedTasks()
 
 else:
     parser.print_help()

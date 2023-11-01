@@ -236,21 +236,20 @@ def sortCompletedTasks():
         print(f"{Fore.LIGHTRED_EX}An error occurred while loading tasks from JSON:{Fore.RESET}\n{e}")
 
     # sort the completed tasks and move them to the end of the list
-    for task in tasks:
+    completedTasks = []
+    for task in tasks[:]:
         # sort the IDs and fill the gap of the deleted task
         if task["completed"] == True:
-            print(tasks)
-            tasks.append(task)
-            print(tasks)
+            completedTasks.append(task)
             tasks.remove(task)
-            print(tasks)
+    tasks.extend(completedTasks)
 
     # write the updated task list to the json file
     with open(tasksJson_file, "w") as file:
         json.dump(tasks, file, indent=4)
 
+    # sort the tasks IDs
     manualSort()
-    print(f"{Fore.LIGHTMAGENTA_EX}-Tasks sorted successfully-")
     return
-
+# Usage:
 #sortCompletedTasks()
