@@ -99,7 +99,7 @@ def updateTaskCompletion(taskID: int, isCompleted: bool):
 # Usage:
 #updateTaskCompletion(1, isCompleted=True)
 
-def manualSort():
+def manualSort(displaySortMessage: bool = True):
     tasks = []
 
     # check for existence of tasks.json
@@ -125,7 +125,8 @@ def manualSort():
     with open(tasksJson_file, "w") as file:
         json.dump(tasks, file, indent=4)
 
-    print(f"{Fore.LIGHTMAGENTA_EX}-Tasks sorted successfully-")
+    if displaySortMessage == True:
+        print(f"{Fore.LIGHTMAGENTA_EX}-Tasks sorted successfully-")
     return
 
 
@@ -253,3 +254,38 @@ def sortCompletedTasks():
     return
 # Usage:
 #sortCompletedTasks()
+
+def deleteCompletedTasks():
+    tasks = []
+
+    # check for existence of tasks.json
+    if os.path.isfile(tasksJson_file) == False:
+        print(f"{Fore.LIGHTRED_EX}-No task to sort-")
+        return exit()
+    
+    try: # read/load the tasks from json into a variable
+        with open(tasksJson_file, "r") as file:
+            tasks = json.load(file)
+    except json.JSONDecodeError:
+        print(f"{Fore.LIGHTRED_EX}-No task to sort-")
+        return exit()
+    except Exception as e:
+        print(f"{Fore.LIGHTRED_EX}An error occurred while loading tasks from JSON:{Fore.RESET}\n{e}")
+
+    # sort the completed tasks and move them to the end of the list
+    for task in tasks[:]:
+        # sort the IDs and fill the gap of the deleted task
+        if task["completed"] == True:
+            tasks.remove(task)
+
+    # write the updated task list to the json file
+    with open(tasksJson_file, "w") as file:
+        json.dump(tasks, file, indent=4)
+
+    # sort the tasks IDs
+    manualSort(displaySortMessage=False)
+
+    print(f"{Fore.LIGHTMAGENTA_EX}-Completed tasks deleted successfully-")
+    return
+# Usage:
+#deleteCompletedTasks()
