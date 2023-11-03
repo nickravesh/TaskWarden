@@ -289,3 +289,36 @@ def deleteCompletedTasks():
     return
 # Usage:
 #deleteCompletedTasks()
+
+def resetTasks(): # delete all the tasks
+    tasks = []
+
+    # check for existence of tasks.json
+    if os.path.isfile(tasksJson_file) == False:
+        print(f"{Fore.LIGHTRED_EX}-No task to sort-")
+        return exit()
+    
+    try: # read/load the tasks from json into a variable
+        with open(tasksJson_file, "r") as file:
+            tasks = json.load(file)
+    except json.JSONDecodeError:
+        print(f"{Fore.LIGHTRED_EX}-No task to sort-")
+        return exit()
+    except Exception as e:
+        print(f"{Fore.LIGHTRED_EX}An error occurred while loading tasks from JSON:{Fore.RESET}\n{e}")
+
+    # remove all the tasks from the list
+    for task in tasks[:]:
+        tasks.remove(task)
+
+    # write the updated task list to the json file
+    with open(tasksJson_file, "w") as file:
+        json.dump(tasks, file, indent=4)
+
+    # sort the tasks IDs
+    manualSort(displaySortMessage=False)
+
+    print(f"{Fore.LIGHTMAGENTA_EX}-Completed tasks deleted successfully-")
+    return
+# Usage:
+#resetTasks()
