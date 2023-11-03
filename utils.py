@@ -260,14 +260,14 @@ def deleteCompletedTasks():
 
     # check for existence of tasks.json
     if os.path.isfile(tasksJson_file) == False:
-        print(f"{Fore.LIGHTRED_EX}-No task to sort-")
+        print(f"{Fore.LIGHTRED_EX}-No task to delete-")
         return exit()
     
     try: # read/load the tasks from json into a variable
         with open(tasksJson_file, "r") as file:
             tasks = json.load(file)
     except json.JSONDecodeError:
-        print(f"{Fore.LIGHTRED_EX}-No task to sort-")
+        print(f"{Fore.LIGHTRED_EX}-No task to delete-")
         return exit()
     except Exception as e:
         print(f"{Fore.LIGHTRED_EX}An error occurred while loading tasks from JSON:{Fore.RESET}\n{e}")
@@ -295,14 +295,14 @@ def resetTasks(): # delete all the tasks
 
     # check for existence of tasks.json
     if os.path.isfile(tasksJson_file) == False:
-        print(f"{Fore.LIGHTRED_EX}-No task to sort-")
+        print(f"{Fore.LIGHTRED_EX}-No task to delete-")
         return exit()
     
     try: # read/load the tasks from json into a variable
         with open(tasksJson_file, "r") as file:
             tasks = json.load(file)
     except json.JSONDecodeError:
-        print(f"{Fore.LIGHTRED_EX}-No task to sort-")
+        print(f"{Fore.LIGHTRED_EX}-No task to delete-")
         return exit()
     except Exception as e:
         print(f"{Fore.LIGHTRED_EX}An error occurred while loading tasks from JSON:{Fore.RESET}\n{e}")
@@ -318,7 +318,7 @@ def resetTasks(): # delete all the tasks
     # sort the tasks IDs
     manualSort(displaySortMessage=False)
 
-    print(f"{Fore.LIGHTMAGENTA_EX}-Completed tasks deleted successfully-")
+    print(f"{Fore.LIGHTMAGENTA_EX}-All tasks have been deleted successfully-")
     return
 # Usage:
 #resetTasks()

@@ -45,7 +45,10 @@ pip3 install colorama
 | add [taskTitle]| add new task(s) | tw add "review the code"| tw add "debug foo" "commit the changes" |
 | done [taskID)]| mark task(s) as done/undone | tw done 1 | tw done 3 5 9 |
 | rm [taskID] | remove task(s) | tw rm 1 | tw rm 2 4 8 |
-| ls | list the tasks | tw ls | -
+| ls | list the tasks | tw ls | - |
+| sort | sort completed tasks | tw sort | - |
+| refresh | delete all completed tasks | tw refresh | - |
+| reset | delete all the tasks/clear list | tw reset | - |
 
 **Note:** You can also use `TaskWarden`, `taskwarden` or even `todo` instead of `tw` if you like.
 
